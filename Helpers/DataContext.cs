@@ -14,7 +14,7 @@ public class DataContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        options.UseNpgsql(Configuration.GetConnectionString("webapiCRudDatabase"));
+        options.UseNpgsql(Configuration.GetConnectionString("webapiCrudDatabase"));
     }
 
     public DbSet<Todo> Todos { get; set; }
