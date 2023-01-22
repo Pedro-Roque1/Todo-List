@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using webapiCrud.Entities;
+using webapiCrud.Models.Todo;
 
 namespace WebApi.Helpers;
 

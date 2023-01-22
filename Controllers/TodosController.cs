@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Helpers;
+using webapiCrud.Models.Todo;
 using webapiCrud.TodosService;
 
 namespace webapiCrud.Controllers;
@@ -18,9 +19,25 @@ public class TodosController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> Index()
+    public async Task<ActionResult<List<Todo>>> Index()
     {
         var stodos = new TodoService(_context, _logger);
-        return Ok(await stodos.GetAll());
+
+        var todos = new List<Todo>();
+        todos.AddRange(await stodos.GetAll());
+
+        return Ok(todos);
     }
-}
+
+    [HttpGet("details/{id}")]
+    public async Task<IActionResult> Details(int id)
+    {
+        var stodos = new TodoService(_context, _logger);
+
+        var todo = await stodos.GetById(id);
+        if (todo == null)
+            return BadRequest();
+            
+        return Ok(todo);
+    }
+} 

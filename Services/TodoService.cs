@@ -20,13 +20,14 @@ public class TodoService
     // todos os registros de 'Todos' da base de dados
     public async Task<List<Todo>> GetAll()
     {
-        var registros = await _context.Todos.Select(t => new Todo ()
-        {
-            Id = t.Id,
-            Titulo = t.Titulo,
-            Descricao = t.Descricao
-        }).ToListAsync();
-
+        var registros = await _context.Todos.ToListAsync();
         return registros;
+    }
+
+    public async Task<Todo> GetById(int id)
+    {
+        return await _context.Todos
+            .Where(t => t.Id == id)
+            ?.FirstOrDefaultAsync() ?? null ;
     }
 }
