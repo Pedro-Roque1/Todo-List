@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Helpers;
+using webapiCrud.Entities;
+using webapiCrud.Models;
 using webapiCrud.Models.Todo;
-
 namespace webapiCrud.TodosService;
 
 public class TodoService
@@ -18,16 +19,33 @@ public class TodoService
 
     // Método responsável por retornar
     // todos os registros de 'Todos' da base de dados
-    public async Task<List<Todo>> GetAll()
+    public async Task<IEnumerable<Todo>> All()
     {
         var registros = await _context.Todos.ToListAsync();
-        return registros;
+        return registros.Select(c => new Todo(c));
     }
 
-    public async Task<Todo> GetById(int id)
+    public async Task<Todo> Find(int id)
     {
-        return await _context.Todos
+        var todo = await _context.Todos
             .Where(t => t.Id == id)
-            ?.FirstOrDefaultAsync() ?? null ;
+            .FirstOrDefaultAsync();
+        
+        if (todo != null)
+            return new Todo(todo);
+        
+        return null;
+    }
+
+    public async Task CreateItem(Todo it)
+    {
+        var te = new TodoEntity();
+        
+        te.Descricao = it.Descricao;
+        te.Titulo = it.Titulo;
+        te.Prazo = it.Prazo;
+        
+        _context.Add(te);
+        await _context.SaveChangesAsync();
     }
 }

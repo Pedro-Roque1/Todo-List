@@ -1,30 +1,34 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using webapiCrud.Entities;
 
 namespace webapiCrud.Models.Todo;
 
 public class Todo
 {
-    [Column("Id")]
-    [Key]
-    public int Id { get; set; }
-    
-    [Column("Titulo")]
+    public int Id { get; private set; }
     public string Titulo { get; set; }
-   
-    [Column("Descricao")]
     public string Descricao { get; set; }
-
-    [Column("Prazo")]
     public DateTime? Prazo{ get; set; }
-
-    [Column("Status")]
     public EStatusTodo Status { get;set; }
-}
 
-public enum EStatusTodo
-{
-    Pendente = 0,
-    EmAndamento = 1,
-    Finalizado = 2
+    public TodoEntity? _entity { get; set; }
+
+    public Todo(string titulo, string descricao, DateTime? prazo)
+    {
+        this.Titulo = titulo;
+        this.Descricao = descricao;
+        this.Prazo = prazo;
+        this.Status = EStatusTodo.Pendente;
+    }
+
+    internal Todo(TodoEntity e)
+    {
+        this._entity = e;
+        this.Id = e.Id;
+        this.Titulo = e.Titulo;
+        this.Descricao = e.Descricao;
+        this.Prazo = e.Prazo;
+        this.Status = EStatusTodo.Pendente;
+    }
 }

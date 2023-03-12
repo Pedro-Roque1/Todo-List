@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using webapiCrud.Entities;
 using webapiCrud.Models.Todo;
 
 namespace WebApi.Helpers;
@@ -17,5 +18,5 @@ public class DataContext : DbContext
         options.UseNpgsql(Configuration.GetConnectionString("webapiCrudDatabase"));
     }
 
-    public DbSet<Todo> Todos { get; set; }
+    public DbSet<TodoEntity> Todos { get; set; }
 }

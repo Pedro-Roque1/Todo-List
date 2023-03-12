@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Helpers;
+using webapiCrud.Dtos.TodoItemDto;
+using webapiCrud.Entities;
+using webapiCrud.Models;
 using webapiCrud.Models.Todo;
 using webapiCrud.TodosService;
 
@@ -24,9 +27,9 @@ public class TodosController : ControllerBase
         var stodos = new TodoService(_context, _logger);
 
         var todos = new List<Todo>();
-        todos.AddRange(await stodos.GetAll());
+        todos.AddRange(await stodos.All());
 
-        return Ok(todos);
+        return Ok(todos.Select(t => new TodoItemDto(t)));
     }
 
     [HttpGet("details/{id}")]
@@ -34,10 +37,28 @@ public class TodosController : ControllerBase
     {
         var stodos = new TodoService(_context, _logger);
 
-        var todo = await stodos.GetById(id);
+        var todo = await stodos.Find(id);
         if (todo == null)
             return BadRequest();
             
-        return Ok(todo);
+        return Ok(new TodoItemDto(todo));
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] TodoCreateFormData form)
+    {
+        var stodos = new TodoService(_context, _logger);
+        
+        if (form == null)
+        {
+            _logger.LogError($"Recebemos um item vazio.");
+            return BadRequest();
+        }
+
+        var todo = new Todo(form.Titulo, form.Descricao, form.PrazoEntrega);
+
+        await stodos.CreateItem(todo);
+
+        return Ok();
     }
 } 
