@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "webapiCrudDatabase": "Host=localhost;Database=teste;Username=postgres;Password=123"
+    "webapiCrudDatabase": "Host=localhost;Database=todo;Username=postgree;Password=123"
   },
   "Logging": {
     "LogLevel": {
